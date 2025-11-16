@@ -9,7 +9,7 @@ addComponent(world, ProductionConfig, factoryEntity);
 addComponent(world, ProductionState, factoryEntity);
 
 // Intervalle de base (1 s) et 1 cycle par intervalle
-ProductionConfig.baseIntervalMs[factoryEntity] = 1000;
+ProductionConfig.baseIntervalMs[factoryEntity] = 60000;
 ProductionConfig.baseQuantity[factoryEntity] = 1;
 
 // État initial : temps écoulé à 0 ms, multiplicateur 1×, actif, 0 production en attente
