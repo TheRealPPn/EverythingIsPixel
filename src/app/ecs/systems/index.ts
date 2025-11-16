@@ -1,15 +1,13 @@
 import { world } from "@/app/ecs/world";
 import { productionSystem } from "@/app/ecs/systems/productionSystem";
-import { useGameStore } from "@/app/store/gameStore";
+import { factoryProductionSystem } from "@/app/ecs/systems/factoryProductionSystem";
+// import { useGameStore } from "@/app/store/gameStore"; // n’est plus nécessaire ici
 
 export function updateWorld(dt: number) {
-  // Moteur ECS : avance la production avec notre system
+  // Met à jour les compteurs de production (elapsedMs et pendingProductions)
   productionSystem(world, dt);
-
-  // MOTEUR ACTUEL (Zustand)
-  // -> On le garde pour l’instant afin de ne rien casser.
-  const applyProduction = useGameStore.getState().applyProduction;
-  applyProduction(dt);
-
+  // Consomme les productions en attente et les transforme en pixels
+  factoryProductionSystem(world);
+  // L’appel à applyProduction(dt) du store peut être retiré une fois ce système en place
   return world;
 }
