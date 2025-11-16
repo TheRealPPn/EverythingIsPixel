@@ -1,12 +1,7 @@
 import { create } from "zustand";
 import type { ColorId } from "@/app/colors/colorId";
-import {
-  createInitialFactoryState,
-  computeFactoryProduction,
-} from "@/features/factory/factoryModel";
-import {
-  createInitialGrinderState,
-} from "@/features/grinder/grinderModel";
+import { createInitialFactoryState } from "@/features/factory/FactoryModel";
+import { createInitialGrinderState } from "@/features/grinder/GrinderModel";
 
 export type PixelPool = {
   [colorId: string]: bigint; // ColorId => quantité en entier
@@ -40,7 +35,7 @@ export type GameState = {
   toggleLoop: () => void;
 
   // Tick global (appelé à chaque frame)
-  applyProduction: (dt: number) => void;
+//   applyProduction: (dt: number) => void;
 };
 
 const STORAGE_KEY = "everything-is-pixel-save-v1";
@@ -174,41 +169,41 @@ export const useGameStore = create<GameState>((set, get) => {
       });
     },
 
-    applyProduction: (dt: number) => {
-      set((state) => {
-        let pixelPool: PixelPool = { ...state.pixelPool };
-        let fractionalPool: FractionalPixelPool = { ...state.fractionalPool };
-
-        // 1) Production de l'usine (passive), selon SA logique
-        const factoryOutputs = computeFactoryProduction(dt, state.factory);
-        for (const out of factoryOutputs) {
-          const colorId = out.colorId;
-          const producedFloat = out.amountFloat;
-          const prevFrac = fractionalPool[colorId] ?? 0;
-          const total = prevFrac + producedFloat;
-
-          const whole = Math.floor(total);
-          const frac = total - whole;
-
-          if (whole > 0) {
-            const current = pixelPool[colorId] ?? 0n;
-            pixelPool[colorId] = current + BigInt(whole);
-          }
-
-          fractionalPool[colorId] = frac;
-        }
-
-        // 2) Plus tard : d'autres modules passifs (autres usines, transforms, etc.)
-        // 3) La broyeuse reste MANUELLE pour l'instant → pas de prod ici
-
-        const newState: GameState = {
-          ...state,
-          pixelPool,
-          fractionalPool,
-        };
-        persist(newState);
-        return newState;
-      });
-    },
+//     applyProduction: (dt: number) => {
+//       set((state) => {
+//         let pixelPool: PixelPool = { ...state.pixelPool };
+//         let fractionalPool: FractionalPixelPool = { ...state.fractionalPool };
+// 
+//         // 1) Production de l'usine (passive), selon SA logique
+//         const factoryOutputs = computeFactoryProduction(dt, state.factory);
+//         for (const out of factoryOutputs) {
+//           const colorId = out.colorId;
+//           const producedFloat = out.amountFloat;
+//           const prevFrac = fractionalPool[colorId] ?? 0;
+//           const total = prevFrac + producedFloat;
+// 
+//           const whole = Math.floor(total);
+//           const frac = total - whole;
+// 
+//           if (whole > 0) {
+//             const current = pixelPool[colorId] ?? 0n;
+//             pixelPool[colorId] = current + BigInt(whole);
+//           }
+// 
+//           fractionalPool[colorId] = frac;
+//         }
+// 
+//         // 2) Plus tard : d'autres modules passifs (autres usines, transforms, etc.)
+//         // 3) La broyeuse reste MANUELLE pour l'instant → pas de prod ici
+// 
+//         const newState: GameState = {
+//           ...state,
+//           pixelPool,
+//           fractionalPool,
+//         };
+//         persist(newState);
+//         return newState;
+//       });
+//     },
   };
 });
