@@ -65,12 +65,3 @@ export function getFactoryCurrentRatePerSecond(state: FactoryState): number {
 export function getFactoryPrimaryColorId(_state: FactoryState): ColorId {
   return colorIdFromRGB(255, 255, 255);
 }
-
-/**
- * Couleur principale produite par l'usine.
- * Pour l'instant : blanc (255,255,255) => COLOR_255255255.
- * Plus tard, on pourra faire dépendre ça du level, des upgrades, etc.
- */
-export function getFactoryPrimaryColorId(_state: FactoryState): ColorId {
-  return colorIdFromRGB(255, 255, 255); // "COLOR_255255255"
-}
