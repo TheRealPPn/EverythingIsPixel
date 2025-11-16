@@ -1,0 +1,174 @@
+:root {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  color-scheme: dark;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body,
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  overflow: hidden;
+  background: #050509;
+}
+
+.app-root {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+/* Canvas Pixi occupe tout l’espace */
+.app-root > div {
+  width: 100%;
+  height: 100%;
+}
+
+/* Overlay UI par-dessus Pixi */
+.ui-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  pointer-events: none;
+  padding: 12px;
+  gap: 12px;
+}
+
+.ui-overlay > * {
+  pointer-events: auto; /* réactive les clics pour les panneaux UI */
+  background: rgba(10, 10, 20, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-size: 13px;
+}
+
+/* Sidebar (générateurs) à gauche */
+.generator-sidebar {
+  pointer-events: auto;
+  width: 260px;
+  background: rgba(10, 10, 20, 0.9);
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  padding: 8px 10px;
+  font-size: 13px;
+}
+
+.generator-sidebar h2 {
+  margin-bottom: 6px;
+  font-size: 14px;
+}
+
+.generator-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.generator-card {
+  background: rgba(20, 20, 30, 0.9);
+  border-radius: 8px;
+  border: 1px solid transparent;
+  padding: 6px 8px;
+  cursor: pointer;
+  transition: transform 0.1s ease, border-color 0.1s ease, background 0.1s ease;
+}
+
+.generator-card:hover {
+  transform: translateY(-1px);
+  border-color: rgba(255, 255, 255, 0.24);
+  background: rgba(30, 30, 45, 0.95);
+}
+
+.generator-card.active {
+  border-color: #6ee7ff;
+  box-shadow: 0 0 8px rgba(110, 231, 255, 0.4);
+}
+
+.generator-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4px;
+}
+
+.generator-kind {
+  font-size: 11px;
+  opacity: 0.7;
+}
+
+.generator-card-body {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.generator-rate,
+.generator-stock {
+  font-size: 12px;
+}
+
+/* Zone de page à droite */
+.page-area {
+  flex: 1;
+  pointer-events: auto;
+  background: rgba(5, 5, 15, 0.9);
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  padding: 10px;
+  overflow: auto;
+}
+
+.pixel-grid {
+  margin-top: 12px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 8px;
+}
+
+.pixel-cell {
+  background: rgba(20, 20, 30, 0.95);
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 6px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+}
+
+.pixel-swatch {
+  width: 28px;
+  height: 28px;
+  border-radius: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.pixel-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.pixel-id {
+  font-family: monospace;
+  font-size: 10px;
+  opacity: 0.8;
+}
+
+.pixel-amount {
+  font-weight: 500;
+}
+
