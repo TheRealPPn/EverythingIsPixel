@@ -9,6 +9,7 @@ import {
   getGrinderMainColor,
 } from "@/features/grinder/GrinderModel";
 
+// Type definitions for menu items and sections
 type MenuItem = {
   id: string;
   label: string;
@@ -22,6 +23,7 @@ type MenuSection = {
   items: MenuItem[];
 };
 
+// Menu structure definition
 const SECTIONS: MenuSection[] = [
   {
     id: "production",
@@ -41,24 +43,35 @@ const SECTIONS: MenuSection[] = [
   },
 ];
 
+/**
+ * Barre latérale principale pour la boucle de jeu.
+ * Affiche des informations dynamiques sur la production en fonction de l'état ECS.
+ */
 export function LoopSidebar() {
   const navigate = useNavigate();
   const location = useLocation();
 
+  // Récupération de l'état via le store Zustand
   const factory = useGameStore((s) => s.factory);
   const grinder = useGameStore((s) => s.grinder);
   const pixelPool = useGameStore((s) => s.pixelPool);
 
-  // Infos calculées pour affichage “live”
+  // Calcul des informations pour l'usine
   const factoryColorId = getFactoryPrimaryColorId(factory);
-  const factoryRate = getFactoryCurrentRatePerSecond(factory);
+  const factoryRatePerSecond = getFactoryCurrentRatePerSecond(factory);
   const factoryStock = pixelPool[factoryColorId] ?? 0n;
+  // Format dynamique du sous-titre : px/s ou px/min selon la cadence
+  const factorySubtitle =
+    factoryRatePerSecond < 0.1
+      ? `${(factoryRatePerSecond * 60).toFixed(1)} px/min`
+      : `${factoryRatePerSecond.toFixed(1)} px/s`;
 
+  // Calcul des informations pour la broyeuse
   const grinderColorId = getGrinderMainColor(grinder);
   const grinderStock = pixelPool[grinderColorId] ?? 0n;
 
-  const totalPixels =
-    Object.values(pixelPool).reduce((acc, v) => acc + (v ?? 0n), 0n);
+  // Calcul du total de pixels dans la réserve
+  const totalPixels = Object.values(pixelPool).reduce((acc, v) => acc + (v ?? 0n), 0n);
 
   return (
     <div className="generator-sidebar">
@@ -75,14 +88,14 @@ export function LoopSidebar() {
               let extraLine: string | null = null;
 
               if (item.id === "factory") {
-                subtitle = `${factoryRate.toFixed(1)} px/s`;
-                extraLine = `Stock : ${formatPixelAmount(factoryStock)} px`;
+                subtitle = factorySubtitle;
+                extraLine = `Stock : ${formatPixelAmount(factoryStock)} px`;
               } else if (item.id === "grinder") {
                 subtitle = item.kind === "manual" ? "Manuel" : "Générateur";
-                extraLine = `Stock : ${formatPixelAmount(grinderStock)} px`;
+                extraLine = `Stock : ${formatPixelAmount(grinderStock)} px`;
               } else if (item.id === "pool") {
                 subtitle = "Vue globale";
-                extraLine = `Total : ${formatPixelAmount(totalPixels)} px`;
+                extraLine = `Total : ${formatPixelAmount(totalPixels)} px`;
               }
 
               return (
